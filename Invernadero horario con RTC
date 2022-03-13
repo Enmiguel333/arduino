@@ -1,0 +1,150 @@
+
+#include <Wire.h>
+#include "Sodaq_DS3231.h"
+char DiaSemana[][4] = {"Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"};
+// La linea fija la fecha, hora y dia de la semana, se debe suprimir la linea en la segunda carga
+// Ejemplo 2018 noviembre 11, 08:00:00  dia 6-Sabado (0=Dom, 1=Lun, 2=Mar, 3=Mie, 4=Jue, 5=Vie, 6=Sab)
+DateTime dt(2022, 03, 13, 23, 59, 40, 0);
+
+void setup() {
+
+  pinMode(3, OUTPUT);
+  pinMode(4, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(7, OUTPUT);
+  
+  Serial.begin(9600);
+  
+  rtc.begin();
+  Wire.begin();
+
+  // La linea fija la fecha, hora y dia de la semana, se debe suprimir la linea en la segunda carga
+  rtc.setDateTime(dt);
+}
+
+void loop() {
+  DateTime now = rtc.now();
+  Serial.print("Hora: ");
+  Serial.print(now.hour());
+  Serial.print(":");
+  Serial.print(now.minute());
+  Serial.print(":");
+  Serial.println(now.second());
+
+  delay(1000);
+
+  int hora    = now.hour();
+  int minuto  = now.minute();
+  int segundo = now.second();
+  
+  //////////////Regadores manana//////////////////////////
+
+  if (hora == 10 && minuto >= 0 && minuto <= 1) {
+    Serial.print(" Regador 1 manana encendido ");
+    digitalWrite(3, true);
+  }
+
+  if (hora == 10 && minuto == 2) {
+    Serial.print(" Regador 1 manana apagado ");
+    digitalWrite(3, false);
+  }
+
+  if (hora == 10 && minuto >= 2 && minuto <= 3 ) {
+    Serial.print(" Regador 2 manana encendido ");
+    digitalWrite(4, true);
+  }
+
+  if (hora == 10 && minuto == 4) {
+    Serial.print(" Regador 2 manana apagado ");
+    digitalWrite(4, false);
+  }
+
+  if (hora == 10 && minuto >= 4 && minuto <= 5 ) {
+    Serial.print(" Regador 3 manana encendido ");
+    digitalWrite(5, true);
+  }
+
+  if (hora == 10 && minuto == 6 ) {
+    Serial.print(" Regador 3 manana apagado ");
+    digitalWrite(5, false);
+  }
+
+  if (hora == 10 && minuto >= 6 && minuto <= 7 ) {
+    Serial.print(" Regador 4 manana encendido ");
+    digitalWrite(6, true);
+  }
+
+  if (hora == 10 && minuto == 8) {
+    Serial.print(" Regador 4 manana apagado ");
+    digitalWrite(6, false);
+  }
+
+  ///////////////////Regadores tarde/////////////////////////
+
+  if (hora == 17 && minuto >= 0 && minuto <= 0) {
+    Serial.print(" Regador 1 tarde encendido ");
+    digitalWrite(3, true);
+  }
+
+  if (hora == 17 && minuto == 1) {
+    Serial.print(" Regador 1 tarde apagado ");
+    digitalWrite(3, false);
+  }
+
+  if (hora == 17 && minuto >= 1 && minuto <= 1 ) {
+    Serial.print("Regador 2 tarde encendido ");
+    digitalWrite(4, true);
+  }
+
+  if (hora == 17 && minuto == 2) {
+    Serial.print(" Regador 2  tarde apagado ");
+    digitalWrite(4, false);
+  }
+
+  if (hora == 17 && minuto >= 2 && minuto <= 2 ) {
+    Serial.print(" Regador 3 tarde encendido ");
+    digitalWrite(5, true);
+  }
+
+  if (hora == 17 && minuto == 3) {
+    Serial.print(" Regador 3 tarde apagado ");
+    digitalWrite(5, false);
+  }
+
+  if (hora == 17 && minuto >= 3 && minuto <= 3 ) {
+    Serial.print(" Regador 4  tarde encendido ");
+    digitalWrite(6, true);
+  }
+
+  if (hora == 17 && minuto == 4) {
+    Serial.print(" Regador 4 tarde apagado ");
+    digitalWrite(6, false);
+  }
+
+  //////////////////////////luces/////////////////////////////
+
+  /*
+  Lo hice en 2 partes, si hay un corte de luz y cuando llega es antes de las 23:59 enciende de nuevo, 
+  pero si pasa de esa marca no, dividi el codigo y asi al haber algun corte de luz cuando llegue a la hora que sea (que este activa) se activara de iugal forma.
+  */
+
+  if (hora >= 19 && minuto >= 0 ) {
+    Serial.print(" Luces encendidas ");
+    digitalWrite(7, true);
+  }
+
+  if (hora == 0 && minuto == 0) {
+    Serial.print(" Luces apagadas ");
+    digitalWrite(7, false);
+  }
+  if (hora >= 0 && minuto >= 0 ) {
+    Serial.print(" Luces encendidas ");
+    digitalWrite(7, true);
+  }
+
+  if (hora == 6 && minuto == 0) {
+    Serial.print(" Luces apagadas ");
+    digitalWrite(7, false);
+  }
+}
