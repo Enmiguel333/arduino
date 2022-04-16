@@ -5,7 +5,7 @@ char DiaSemana[][4] = {"Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"};
 
 // La linea fija la fecha, hora y dia de la semana, se debe suprimir la linea en la segunda carga
 // Ejemplo 2018 noviembre 11, 08:00:00  dia 6-Sabado (0=Dom, 1=Lun, 2=Mar, 3=Mie, 4=Jue, 5=Vie, 6=Sab)
-DateTime dt(2022, 03, 16, 16, 59, 55, 4);
+//DateTime dt(2022, 03, 23, 19, 20, 55, 3);
 
 void setup() {
 
@@ -29,7 +29,7 @@ void setup() {
   Wire.begin();
 
   // La linea fija la fecha, hora y dia de la semana, se debe suprimir la linea en la segunda carga
-  rtc.setDateTime(dt);
+  //rtc.setDateTime(dt);
 }
 
 void loop() {
@@ -89,6 +89,48 @@ void loop() {
     pinMode(6, LOW);
   }
 
+
+  ///////////////////Regadores mediodia/////////////////////////
+
+  if (hora == 14 && minuto >= 0 && minuto <= 0) {
+    Serial.print(" Regador 1 mediodia encendido ");
+    pinMode(3, HIGH);
+  }
+
+  if (hora == 14 && minuto == 2) {
+    Serial.print(" Regador 1 mediodia apagado ");
+    pinMode(3, LOW);
+  }
+
+  if (hora == 14 && minuto >= 2 && minuto <= 2 ) {
+    Serial.print("Regador 2 mediodia encendido ");
+    pinMode(4, HIGH);
+  }
+
+  if (hora == 14 && minuto == 4) {
+    Serial.print(" Regador 2  mediodia apagado ");
+    pinMode(4, LOW);
+  }
+
+  if (hora == 14 && minuto >= 4 && minuto <= 4 ) {
+    Serial.print(" Regador 3 mediodia encendido ");
+    pinMode(5, HIGH);
+  }
+
+  if (hora == 14 && minuto == 6) {
+    Serial.print(" Regador 3 mediodia apagado ");
+  pinMode(5, LOW);
+  }
+
+  if (hora == 14 && minuto >= 6 && minuto <= 6 ) {
+    Serial.print(" Regador 4  mediodia encendido ");
+   pinMode(6, HIGH);
+  }
+
+  if (hora == 14 && minuto == 8) {
+    Serial.print(" Regador 4 mediodia apagado ");
+    pinMode(6, LOW);
+  }
   ///////////////////Regadores tarde/////////////////////////
 
   if (hora == 17 && minuto >= 0 && minuto <= 0) {
