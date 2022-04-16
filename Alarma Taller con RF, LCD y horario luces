@@ -20,11 +20,11 @@ LiquidCrystal_I2C lcd (0x27, 2, 1, 0, 4, 5, 6, 7);    // DIR, E, RW, RS, D4, D5,
 MFRC522 mfrc522(SS, RST); // crea objeto mfrc522 enviando pines de slave select y reset
 
 byte LecturaUID[4];                             // crea array para almacenar el UID leido
-byte Usuario1[4] = {0x8A, 0XF0, 0X79, 0X81} ;   // UID Malpa Llavero
-byte Usuario3[4] = {0xD4, 0X0B, 0XC2, 0X49 } ;  // UID Jose Luis
-byte Usuario4[4] = {0x73, 0X5E, 0XC1, 0X49 } ;  // UID Ismael
-byte Usuario5[4] = {0xAA, 0X84, 0XC2, 0X49 } ;  // UID Angel
-byte Usuario6[4] = {0xA4, 0X8F, 0XC1, 0X49 } ;  // UID Carolina
+byte Usuario1[4] = {0x, 0XF0, 0X79, 0X81} ;   // UID Malpa Llavero
+byte Usuario3[4] = {0x, 0X0B, 0XC2, 0X49 } ;  // UID Jose Luis
+byte Usuario4[4] = {0x, 0X5E, 0XC1, 0X49 } ;  // UID Ismael
+byte Usuario5[4] = {0x, 0X84, 0XC2, 0X49 } ;  // UID Angel
+byte Usuario6[4] = {0x, 0X8F, 0XC1, 0X49 } ;  // UID Carolina
 
 void beep(unsigned char pausa)
 {
