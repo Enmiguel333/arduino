@@ -1,0 +1,254 @@
+//D2 boton fuente
+//D3- salida fuente
+//D4 boton vaciar
+//D5- salida vaciar
+//D6- salida pulsos
+//D7 boton bomba
+//D8 boton auto
+//D9- salida bomba
+//D10- salida caiman
+//D11- salida enchufe
+//D12 boton caiman
+//D13 boton enchufe
+//A0 mas pulso
+//A1 menos pulso
+//A2 apaga prende pulso
+//A3
+//A4
+//A5
+
+#include <elapsedMillis.h>
+
+
+#define pul1 A0
+#define pul2 A1
+#define pul3 A2
+#define led 6
+
+const int fuente = 3;
+const int vaciar = 5;
+const int bomba = 9;
+const int enchufe = 11;
+const int caiman = 10;
+
+const int botonfuente = 2;
+const int botonvaciar = 4;
+const int botonbomba = 7;
+const int botonauto = 8;
+const int botonenchufe = 13;
+const int botoncaiman = 12;
+
+int val = 0; //val se emplea para almacenar el estado del boton
+int val1 = 0; 
+int val2 = 0; 
+int val3 = 0; 
+int val4 = 0; 
+int val5 = 0; 
+
+int state = 0; // 0 LED apagado, mientras que 1 encendido
+int state1 = 0; 
+int state2 = 0; 
+int state3 = 0; 
+int state4 = 0; 
+int state5 = 0; 
+
+int old_val = 0; // almacena el antiguo valor de val
+int old_val1 = 0; 
+int old_val2 = 0; 
+int old_val3 = 0; 
+int old_val4 = 0; 
+int old_val5 = 0; 
+
+//Variables para almacenar el estado lógico de los pulsadores
+
+boolean set;
+boolean mas;
+boolean menos;
+
+//tiempo
+
+elapsedMillis timeElapsed;
+unsigned int interval = 1000;
+//Variable para hacer un antirrebote
+
+boolean estadoAnterior = 0;
+//Con esta variable, dependiendo de su valor vamos a encender o apagar el led
+short x;
+//Variable utilizada para modificar el tiempo del parpadeo
+int tiempo = 10;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(pul1, INPUT);
+  pinMode(pul2, INPUT);
+  pinMode(pul3, INPUT);
+  pinMode(led, OUTPUT);
+  pinMode(bomba, OUTPUT); 
+  pinMode(enchufe, OUTPUT); 
+  pinMode(caiman, OUTPUT); 
+  pinMode(fuente, OUTPUT); 
+  pinMode(vaciar, OUTPUT); 
+  pinMode(botonauto, INPUT); 
+  pinMode(botonfuente, INPUT); 
+  pinMode(botonvaciar, INPUT); 
+  pinMode(botonbomba, INPUT); 
+  pinMode(botonenchufe, INPUT); 
+  pinMode(botoncaiman, INPUT); 
+
+}
+
+void selec() {
+
+  set = digitalRead(pul3); // Verificamos el estado lógico del pulsador set
+
+  if (set != estadoAnterior) { // Si el estado actual del pulsador "set" es diferente al estado anterior, entonces continuamos
+    if (set == HIGH) { // Si el estado del pulsador es igual a 1(Si presionamos el pulsador), entonces:
+      x++; //Sumamos una la variable x;
+    }
+  }
+
+  delay(10); //Establecemos una pausa de 50ms
+  estadoAnterior = set; //El valor de la variable estadoAnterior va a ser igual al valor del estado actual
+
+  // La variable x va a tener 2 valores 0 y 1 cero para apagar el led y uno para encenderlo
+
+  if (x == 2 ) { // Cuando la variable x llegue a 2:
+    x = 0;  // Enceramos x.
+  }
+}
+
+void loop() {
+  //fuente
+  
+    {
+      val3 = digitalRead(botonfuente); // lee el estado del Boton
+      if ((val3 == HIGH) && (old_val3 == LOW)) {
+        state3 = 1 - state3;
+        delay(10);
+      }
+      old_val3 = val3; // valor del antiguo estado
+      if (state3 == 1) {
+        digitalWrite(fuente, HIGH); // enciende el LED
+      }
+      else {
+        digitalWrite(fuente, LOW); // apagar el LED
+      }
+    }
+    //vaciar
+     {
+      val4 = digitalRead(botonvaciar); // lee el estado del Boton
+      if ((val4 == HIGH) && (old_val4 == LOW)) {
+        state4 = 1 - state4;
+        delay(10);
+      }
+      old_val4 = val4; // valor del antiguo estado
+      if (state4 == 1) {
+        digitalWrite(vaciar, HIGH); // enciende el LED
+      }
+      else {
+        digitalWrite(vaciar, LOW); // apagar el LED
+      }
+    }
+    //boton auto
+    { 
+      val5 = digitalRead(botonauto); // lee el estado del Boton
+      if (val4 == HIGH) {
+       /*
+        digitalWrite(vaciar, HIGH); // enciende el LED
+        delay(5000);
+        digitalWrite(vaciar, LOW); // apagar el LED*/
+      }
+    /* else {
+        digitalWrite(vaciar, LOW); // apagar el LED
+      }*/
+    }
+  //bomba
+  {
+    val = digitalRead(botonbomba); // lee el estado del Boton
+    if ((val == HIGH) && (old_val == LOW)) {
+      state = 1 - state;
+      delay(10);
+    }
+    old_val = val; // valor del antiguo estado
+    if (state == 1) {
+      digitalWrite(bomba, HIGH); // enciende el LED
+    }
+    else {
+      digitalWrite(bomba, LOW); // apagar el LED
+    }
+  }
+  //enchufe
+  {
+    val1 = digitalRead(botonenchufe); // lee el estado del Boton
+    if ((val1 == HIGH) && (old_val1 == LOW)) {
+      state1 = 1 - state1;
+      delay(10);
+    }
+    old_val1 = val1; // valor del antiguo estado
+    if (state1 == 1) {
+      digitalWrite(enchufe, HIGH); // enciende el LED
+    }
+    else {
+      digitalWrite(enchufe, LOW); // apagar el LED
+
+    }
+    //caiman
+    {
+      val2 = digitalRead(botoncaiman); // lee el estado del Boton
+      if ((val2 == HIGH) && (old_val2 == LOW)) {
+        state2 = 1 - state2;
+        delay(10);
+      }
+      old_val2 = val2; // valor del antiguo estado
+      if (state2 == 1) {
+        digitalWrite(caiman, HIGH); // enciende el LED
+      }
+      else {
+        digitalWrite(caiman, LOW); // apagar el LED
+      }
+    }
+  }
+
+  {
+    selec();
+
+    if (x == 1) { //Si es igual a 1 (Si presionamos el pulsador), entonces:
+
+      digitalWrite(led, HIGH); //Encendemos el led por un tiempo
+      delay(10);
+      digitalWrite(led, LOW); //Apagamos el led por un tiempo
+      delay(tiempo);
+      // Para controlar el tiempo de encendido y apagado del led (Velocidad del parpadeo, utilizamos los dos pulsadores restantes.
+      // Almacenamos en las variables mas y menos los estados lógicos de los pulsadores
+
+      mas = digitalRead(pul2);
+      menos = digitalRead(pul1);
+
+      if (mas == HIGH) { // Si presionamos mas, entonces:
+        tiempo = tiempo + 10; //Sumamos el valor de la variable tiempo + 100, disminuimos la velocidad del parpadeo
+        delay(1);
+      }
+
+      if (menos == HIGH) { // Si presionamos menos, entonces:
+        tiempo = tiempo - 20;//Restamos el valor de la variable tiempo - 100, aumentamos la velocidad del parpadeo
+        delay(1);
+      }
+
+      // Los siguientes son limites que ustedes pueden modificar a su conveniencia
+
+      if (tiempo <= 5) { // Valor mínimo que tomara la variable tiempo.
+        tiempo = 5;
+      }
+
+      if (tiempo > 300) { // Valor máximo que tomara la variable tiempo.
+        tiempo = 300;
+      }
+
+      selec(); // Verificamos si se ha presionado el pulsador selec
+
+    } else {
+      // Si presionamos nuevamente el pulsador set, el led se apagara.
+      digitalWrite(led, LOW);
+    }
+  }
+}
