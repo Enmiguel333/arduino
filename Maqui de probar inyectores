@@ -1,42 +1,45 @@
+//D1 salida rele apagado
 //D2 boton fuente
 //D3- salida fuente
 //D4 boton vaciar
 //D5- salida vaciar
 //D6- salida pulsos
-//D7 boton bomba
+//D7 salida luces pulso
 //D8 boton auto
 //D9- salida bomba
 //D10- salida caiman
 //D11- salida enchufe
-//D12 boton caiman
-//D13 boton enchufe
+//D12 salida rele luz auto
+//D13 salida rele apagado auto
 //A0 mas pulso
 //A1 menos pulso
 //A2 apaga prende pulso
-//A3
-//A4
-//A5
-
-#include <elapsedMillis.h>
-
+//A3 boton caiman
+//A4 boton enchufe
+//A5 boton bomba
 
 #define pul1 A0
 #define pul2 A1
 #define pul3 A2
+#define pul4 A3
+#define pul5 A4
+#define pul6 A5
 #define led 6
 
+const int releemergencia = 1;
 const int fuente = 3;
 const int vaciar = 5;
+const int lucespulso = 7;
 const int bomba = 9;
 const int enchufe = 11;
 const int caiman = 10;
+const int releauto = 13;
+const int releluzauto = 12;
 
 const int botonfuente = 2;
 const int botonvaciar = 4;
-const int botonbomba = 7;
 const int botonauto = 8;
-const int botonenchufe = 13;
-const int botoncaiman = 12;
+
 
 int val = 0; //val se emplea para almacenar el estado del boton
 int val1 = 0; 
@@ -64,16 +67,22 @@ int old_val5 = 0;
 boolean set;
 boolean mas;
 boolean menos;
+boolean caiman1;
+boolean enchufe1;
 
 //tiempo
 
-elapsedMillis timeElapsed;
-unsigned int interval = 1000;
+unsigned long tvaciado;
+unsigned long tauto;
+
 //Variable para hacer un antirrebote
 
 boolean estadoAnterior = 0;
+
 //Con esta variable, dependiendo de su valor vamos a encender o apagar el led
 short x;
+
+
 //Variable utilizada para modificar el tiempo del parpadeo
 int tiempo = 10;
 
@@ -82,18 +91,24 @@ void setup() {
   pinMode(pul1, INPUT);
   pinMode(pul2, INPUT);
   pinMode(pul3, INPUT);
+  pinMode(pul4, INPUT);
+  pinMode(pul5, INPUT);
+  pinMode(pul6, INPUT);
   pinMode(led, OUTPUT);
+  pinMode(releemergencia, OUTPUT);
+  pinMode(lucespulso, OUTPUT);
   pinMode(bomba, OUTPUT); 
   pinMode(enchufe, OUTPUT); 
   pinMode(caiman, OUTPUT); 
   pinMode(fuente, OUTPUT); 
   pinMode(vaciar, OUTPUT); 
+  pinMode(releluzauto, OUTPUT); 
+  pinMode(releauto, OUTPUT); 
   pinMode(botonauto, INPUT); 
   pinMode(botonfuente, INPUT); 
   pinMode(botonvaciar, INPUT); 
-  pinMode(botonbomba, INPUT); 
-  pinMode(botonenchufe, INPUT); 
-  pinMode(botoncaiman, INPUT); 
+  
+  
 
 }
 
@@ -135,36 +150,43 @@ void loop() {
       }
     }
     //vaciar
-     {
-      val4 = digitalRead(botonvaciar); // lee el estado del Boton
-      if ((val4 == HIGH) && (old_val4 == LOW)) {
-        state4 = 1 - state4;
-        delay(10);
-      }
-      old_val4 = val4; // valor del antiguo estado
-      if (state4 == 1) {
-        digitalWrite(vaciar, HIGH); // enciende el LED
-      }
-      else {
-        digitalWrite(vaciar, LOW); // apagar el LED
-      }
+{
+     if ( digitalRead(botonvaciar)==HIGH ) {
+    digitalWrite(vaciar,HIGH); // Encendemos la luz.
+    tvaciado = millis(); // Guardamos CUANDO ha ocurrido.
+  }
+  // Si el botón NO está pulsado.
+  else {
+  
+    if ( millis()-tvaciado > 3000 ) {
+      digitalWrite(vaciar,LOW); // Ha pasado el minuto, apagamos la luz.
     }
-    //boton auto
-    { 
-      val5 = digitalRead(botonauto); // lee el estado del Boton
-      if (val4 == HIGH) {
-       /*
-        digitalWrite(vaciar, HIGH); // enciende el LED
-        delay(5000);
-        digitalWrite(vaciar, LOW); // apagar el LED*/
-      }
-    /* else {
-        digitalWrite(vaciar, LOW); // apagar el LED
-      }*/
+  }
+}
+ //apagado
+{
+     if ( digitalRead(botonauto)==HIGH ) {
+   digitalWrite(releluzauto,HIGH); // Encendemos la luz.
+    tauto = millis(); // Guardamos CUANDO ha ocurrido.
+  
+  }
+  // Si el botón NO está pulsado.
+  else {
+    
+    if ( millis()-tauto > 3000 ) {
+      
+      digitalWrite(releauto,HIGH);
+      delay(100);
+      digitalWrite(releauto,LOW);
+      digitalWrite(releluzauto,LOW);
+      digitalWrite(releemergencia,LOW);
     }
+  }
+}
+  
   //bomba
   {
-    val = digitalRead(botonbomba); // lee el estado del Boton
+    val = digitalRead(pul6); // lee el estado del Boton
     if ((val == HIGH) && (old_val == LOW)) {
       state = 1 - state;
       delay(10);
@@ -179,7 +201,7 @@ void loop() {
   }
   //enchufe
   {
-    val1 = digitalRead(botonenchufe); // lee el estado del Boton
+    val1 = digitalRead(pul4); // lee el estado del Boton
     if ((val1 == HIGH) && (old_val1 == LOW)) {
       state1 = 1 - state1;
       delay(10);
@@ -194,7 +216,7 @@ void loop() {
     }
     //caiman
     {
-      val2 = digitalRead(botoncaiman); // lee el estado del Boton
+      val2 = digitalRead(pul5); // lee el estado del Boton
       if ((val2 == HIGH) && (old_val2 == LOW)) {
         state2 = 1 - state2;
         delay(10);
@@ -213,7 +235,10 @@ void loop() {
     selec();
 
     if (x == 1) { //Si es igual a 1 (Si presionamos el pulsador), entonces:
-
+{ 
+  digitalWrite(lucespulso, HIGH);
+  digitalWrite(releemergencia,HIGH);
+}
       digitalWrite(led, HIGH); //Encendemos el led por un tiempo
       delay(10);
       digitalWrite(led, LOW); //Apagamos el led por un tiempo
@@ -249,6 +274,7 @@ void loop() {
     } else {
       // Si presionamos nuevamente el pulsador set, el led se apagara.
       digitalWrite(led, LOW);
+      digitalWrite(releemergencia,LOW);
     }
   }
 }
