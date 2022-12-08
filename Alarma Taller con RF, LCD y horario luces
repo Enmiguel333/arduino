@@ -9,7 +9,7 @@
 char DiaSemana[][4] = {"Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"};
 // La linea fija la fecha, hora y dia de la semana, se debe suprimir la linea en la segunda carga
 // Ejemplo 2018 noviembre 11, 08:00:00  dia 6-Sabado (0=Dom, 1=Lun, 2=Mar, 3=Mie, 4=Jue, 5=Vie, 6=Sab)
-//DateTime dt(2022, 03, 31, 17, 53, 55, 4);
+//DateTime dt(2022, 03, 31, 16, 59, 58, 4);
 /////Luces/////
 
 LiquidCrystal_I2C lcd (0x27, 2, 1, 0, 4, 5, 6, 7);    // DIR, E, RW, RS, D4, D5, D6, D7
@@ -27,13 +27,6 @@ byte Usuario4[4] = {0x73, 0X5E, 0XC1, 0X49 } ;  // UID Ismael
 byte Usuario5[4] = {0xAA, 0X84, 0XC2, 0X49 } ;  // UID Angel
 byte Usuario6[4] = {0xA4, 0X8F, 0XC1, 0X49 } ;  // UID Carolina
 
-void beep(unsigned char pausa)
-{
-  analogWrite(3, 20);
-  delay(pausa);                 // Espera
-  analogWrite(3, 0);            // Apaga
-  delay(pausa);                 // Espera
-}
 
 void setup() {
   //////////Luces///////
@@ -55,9 +48,6 @@ void setup() {
   pinMode(8, OUTPUT);
   pinMode(rele, OUTPUT);
 
-  beep(50);
-  beep(50);
-  beep(50);
 
   //  delay(400);
   Serial.begin(9600);                   // inicializa comunicacion por monitor serie a 9600 bps
@@ -358,7 +348,7 @@ void luces() {
   Serial.print(":");
   Serial.println(now.second());
 
-  delay(400);
+  delay(1000);
 
   int hora    = now.hour();
   int minuto  = now.minute();
@@ -409,58 +399,111 @@ void sonido() {
   //////////////Luces//////////////////////////
 
 
-  if (hora == 16  && minuto == 0 ) {
-    digitalWrite(3, true);
-    delay(400);
-    digitalWrite(3, false);
-    delay(400);
-    digitalWrite(3, true);
-    delay(400);
-    digitalWrite(3, false);
-    delay(400);
-    digitalWrite(3, true);
-    delay(400);
-    digitalWrite(3, false);
+  if (hora == 16  && minuto == 0 && segundo  == 0 ) {
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+  }
+
+  if (hora == 16  && minuto == 0 && segundo >= 7 ) {
+
+    digitalWrite(3, LOW);
   }
   
-  if (hora == 17  && minuto == 0 ) {
-    digitalWrite(3, true);
-    delay(400);
-    digitalWrite(3, false);
-    delay(400);
-    digitalWrite(3, true);
-    delay(400);
-    digitalWrite(3, false);
-    delay(400);
-    digitalWrite(3, true);
-    delay(400);
-    digitalWrite(3, false);
-    delay(400);
-    digitalWrite(3, true);
-    delay(400);
-    digitalWrite(3, false);
-    delay(400);
-    digitalWrite(3, true);
-    delay(400);
-    digitalWrite(3, false);
-    delay(400);
-    digitalWrite(3, true);
-    delay(400);
-    digitalWrite(3, false);
-    delay(400);
-    digitalWrite(3, true);
-    delay(400);
-    digitalWrite(3, false);
-    delay(400);
-    digitalWrite(3, true);
-    delay(400);
-    digitalWrite(3, false);
-    delay(400);
-    /*
-    beep(500);
-    beep(500);
-    beep(500);
-    */
+  if (hora == 17  && minuto == 0 && segundo  == 0 ) {
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(3000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+  }
 
+  if (hora == 17  && minuto == 0 && segundo >= 23 ) {
+
+    digitalWrite(3, LOW);
+  }
+  if (hora == 18  && minuto == 0 && segundo  == 2 ) {
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+    delay(1000);
+    digitalWrite(3, HIGH);
+    delay(1000);
+    digitalWrite(3, LOW);
+  }
+
+  if (hora == 17  && minuto == 0 && segundo >= 13 ) {
+
+    digitalWrite(3, LOW);
   }
 }
